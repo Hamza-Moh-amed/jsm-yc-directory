@@ -1,12 +1,15 @@
-import { cn, formatDate } from '@/lib/utils'
-import { StartupCardType } from '@/types'
+import { formatDate } from '@/lib/utils'
 import { EyeIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-import { Button, buttonVariants } from './ui/button'
+import { Button } from './ui/button'
+import { STARTUPS_QUERY_RESULT } from '@/sanity.types'
 
-const StartupCard = ({post: {_createdAt, title, description, _id, views, image, author, category}}: {post: StartupCardType} ) => {
+type StartupCardProps = {
+  post: STARTUPS_QUERY_RESULT[number];
+};
+
+const StartupCard = ({post: {_createdAt, title, description, _id, views, image, author, category}}: StartupCardProps) => {
   return (
     <li className='startup-card group'>
 
@@ -24,7 +27,7 @@ const StartupCard = ({post: {_createdAt, title, description, _id, views, image, 
       <div className='flex-between mt-5 gap-5'> 
         <div className='flex-1'>
           <Link href={`/user/${author?._id}`}>
-          <p className='text-16-medium line-clamp-1'>{author.name}</p>
+          <p className='text-16-medium line-clamp-1'>{author?.name}</p>
           </Link>
           <Link
           href={`/startup/${_id}`}>
@@ -48,7 +51,7 @@ const StartupCard = ({post: {_createdAt, title, description, _id, views, image, 
           {description}
       </p>
       <img
-      src={image}
+      src={image!}
       alt='Startup Image'
       className='startup-card_img'
       />
@@ -56,7 +59,7 @@ const StartupCard = ({post: {_createdAt, title, description, _id, views, image, 
 
 
       <div className='flex-between gap-3 mt-5'>
-        <Link href={`/?query=${category.toLowerCase()}`}>
+        <Link href={`/?query=${category?.toLowerCase()}`}>
         <p className='text-16-medium'>{category}</p>
         </Link>
         <Button className="startup-card_btn! hover:bg-primary!">
