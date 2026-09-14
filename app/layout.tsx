@@ -3,6 +3,7 @@ import "./globals.css";
 import AuthProvider from "@/proviers/AuthProvider";
 import localFont from "next/font/local";
 import "easymde/dist/easymde.min.css"
+import { Toaster } from "@/components/ui/toast"
 
 const workSans = localFont({
   src: [
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
       <AuthProvider>
         {children}
+        <Toaster />
       </AuthProvider>
         
         </body>
