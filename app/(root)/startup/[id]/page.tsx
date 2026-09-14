@@ -19,7 +19,7 @@ const StartupDetailPage = async ({params}: {params: Promise<{id: string}>}) => {
   const post = await sanityFetch({
     query: STARTUP_BY_ID_QUERY,
     params: {id},
-    revalidate: 60
+    revalidate: 3600
   })
 
   if(!post) return notFound()
@@ -36,11 +36,12 @@ const StartupDetailPage = async ({params}: {params: Promise<{id: string}>}) => {
       </section>
 
       <section className="section_container">
-        <img
+         <img
           src={post.image}
           alt="thumbnail"
           className="w-full h-auto rounded-xl"
-        />
+        /> 
+        
 
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
           <div className="flex-between gap-5">

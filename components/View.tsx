@@ -1,12 +1,17 @@
 import Ping from './Ping'
 import {  sanityFetch } from '@/sanity/lib/client'
 import { STARTUP_VIEWS_QUERY } from '@/sanity/lib/queries'
+import { writeClient } from '@/sanity/lib/write-client'
+import { after } from 'next/server'
 
 const View = async ({id}: {id: string}) => {
 
 
-    const {views: totalViews} = await  sanityFetch({query: STARTUP_VIEWS_QUERY, params: {id}, revalidate: 0})
-    console.log(totalViews)
+    const {views: totalViews} = await sanityFetch({query: STARTUP_VIEWS_QUERY, params: {id}, revalidate: 0})
+    
+    after(async () => {
+      await writeClient.patch(id).set({views: totalViews + 1}).commit()
+    })
 
   return (
     <div className='view-container'>
