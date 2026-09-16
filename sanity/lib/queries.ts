@@ -82,3 +82,27 @@ export const STARTUPS_BY_AUTHOR_ID_QUERY = defineQuery(`*[_type == "startup" && 
   image,
   pitch,
 }`)
+
+
+
+export const PLAYLIST_BY_SLUG_QUERY =
+  defineQuery(`*[_type == "playlist" && slug.current == $slug][0]{
+  _id,
+  title,
+  slug,
+  select[]->{
+    _id,
+    _createdAt,
+    title,
+    slug,
+    author->{
+      _id,
+      name,
+      image,
+    },
+    views,
+    description,
+    category,
+    image,
+  }
+}`);
