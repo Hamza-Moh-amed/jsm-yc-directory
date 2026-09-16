@@ -7,7 +7,10 @@ import { after } from 'next/server'
 const View = async ({id}: {id: string}) => {
 
 
-    const {views: totalViews} = await sanityFetch({query: STARTUP_VIEWS_QUERY, params: {id}, revalidate: 0})
+    const result = await sanityFetch({query: STARTUP_VIEWS_QUERY, params: {id}, revalidate: 0})
+    const totalViews = result?.views ?? 0
+
+
     
     after(async () => {
       await writeClient.patch(id).set({views: totalViews + 1}).commit()
