@@ -16,9 +16,6 @@ const UserPage = async ({params}: {params: Promise<{id: string}>}) => {
 
   if(!user) return notFound()
   const {bio, image, name, username} = user
-  console.log(user)
-
-  
 
   return (
     <section className='profile_container'>
