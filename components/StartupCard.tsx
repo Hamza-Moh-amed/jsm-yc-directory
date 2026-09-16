@@ -36,7 +36,7 @@ const StartupCard = ({post: {_createdAt, title, description, _id, views, image, 
           </div>
           <Link href={`/user/${author?._id}`}>
               <Image
-              src="/logo.png"
+              src={author?.image ?? ""}
               alt="avatar"
               width={48}
               height={48}
