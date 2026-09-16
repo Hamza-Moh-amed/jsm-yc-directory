@@ -1,7 +1,6 @@
 import { sanityFetch } from '@/sanity/lib/client'
 import { STARTUPS_BY_AUTHOR_ID_QUERY } from '@/sanity/lib/queries'
 import { notFound } from 'next/navigation'
-import React from 'react'
 import StartupCard from './StartupCard'
 
 const UserStartups = async ({id}: {id: string}) => {

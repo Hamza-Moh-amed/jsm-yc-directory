@@ -15,6 +15,34 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type StartupReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "startup";
+};
+
+export type Playlist = {
+  _id: string;
+  _type: "playlist";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  select?: Array<
+    {
+      _key: string;
+    } & StartupReference
+  >;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
 export type AuthorReference = {
   _ref: string;
   _type: "reference";
@@ -39,12 +67,6 @@ export type Startup = {
 };
 
 export type Markdown = string;
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
 
 export type Author = {
   _id: string;
@@ -174,10 +196,12 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | StartupReference
+  | Playlist
+  | Slug
   | AuthorReference
   | Startup
   | Markdown
-  | Slug
   | Author
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -285,6 +309,30 @@ export type STARTUPS_BY_AUTHOR_ID_QUERY_RESULT = Array<{
   pitch: Markdown | null;
 }>;
 
+// Source: sanity/lib/queries.ts
+// Variable: PLAYLIST_BY_SLUG_QUERY
+// Query: *[_type == "playlist" && slug.current == $slug][0]{  _id,  title,  slug,  select[]->{    _id,    _createdAt,    title,    slug,    author->{      _id,      name,      image,    },    views,    description,    category,    image,  }}
+export type PLAYLIST_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  select: Array<{
+    _id: string;
+    _createdAt: string;
+    title: string | null;
+    slug: Slug | null;
+    author: {
+      _id: string;
+      name: string | null;
+      image: string | null;
+    } | null;
+    views: number | null;
+    description: string | null;
+    category: string | null;
+    image: string | null;
+  }> | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -295,5 +343,6 @@ declare module "@sanity/client" {
     '*[_type == "author" && id == $id][0]{_id, id, name, username, email, image, bio}': AUTHOR_BY_GITHUB_ID_QUERY_RESULT;
     '*[_type == "author" && _id == $id][0]{_id, id, name, username, email, image, bio}': AUTHOR_BY_ID_QUERY_RESULT;
     '*[_type == "startup" && author -> _id == $id]{\n  _id, \n  title, \n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image\n  }, \n  views,\n  description,\n  category,\n  image,\n  pitch,\n}': STARTUPS_BY_AUTHOR_ID_QUERY_RESULT;
+    '*[_type == "playlist" && slug.current == $slug][0]{\n  _id,\n  title,\n  slug,\n  select[]->{\n    _id,\n    _createdAt,\n    title,\n    slug,\n    author->{\n      _id,\n      name,\n      image,\n    },\n    views,\n    description,\n    category,\n    image,\n  }\n}': PLAYLIST_BY_SLUG_QUERY_RESULT;
   }
 }
