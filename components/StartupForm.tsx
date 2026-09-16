@@ -16,12 +16,15 @@ import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { formSchema } from "@/lib/validation";
 import {z} from "zod"
-import { toast } from "@/components/ui/toast"
+import { toast } from "./ui/toast";
+import { useRouter } from "next/navigation";
+import { createPitch } from "@/lib/action";
 
 
 const StartupForm = () => {
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [pitch, setPitch] = useState("");
+    const router = useRouter()
     
     const handleFormSubmit =  async (prevState: any, formData: FormData) => {
 
@@ -39,20 +42,41 @@ const StartupForm = () => {
 
                 console.log(formValues)
 
-                // const result = await createIdea(prevState, formData, pitch)
-                // console.log(results)
+                const result = await createPitch(prevState, formData, pitch)
+                console.log(result)
 
+                if(result.status === "SUCCESS") {
+                    toast.add({
+                        type: "success",
+                        title: "Success",
+                        description: "Startup created successfully.",
+                      })
+    
+                router.push(`/startup/${result._id}`)
+                }
+
+                return result
             
         } catch (error) {
             if (error instanceof z.ZodError) {
                 const fieldErrors = z.flattenError(error).fieldErrors;
                 setErrors(fieldErrors as unknown as Record<string, string>);
 
+                toast.add({
+                    type: "error",
+                    title: "ERROR",
+                    description: "Validation Failed. Please check your inputs.",
+                    
+                  })
+
                 return { ...prevState, error: "Validation Failed", status: "ERROR" };
             }
-
-            return {...prevState, error: "An unexpected error has occurred", status: "ERROR"}
-                
+            toast.add({
+                type: "error",
+                title: "ERROR",
+                description: "An unexpected error has occurred.",
+              })
+            return {...prevState, error: "An unexpected error has occurred", status: "ERROR"}          
         } 
         
     }
@@ -75,7 +99,7 @@ const StartupForm = () => {
         </div>
 
         <div>
-        <label htmlFor="title" className="startup-form_label!">
+        <label htmlFor="description" className="startup-form_label!">
             Description
         </label>
         <Textarea
@@ -89,7 +113,7 @@ const StartupForm = () => {
         </div>
 
         <div>
-        <label htmlFor="title" className="startup-form_label!">
+        <label htmlFor="category" className="startup-form_label!">
             Category
         </label>
         <Input
@@ -103,7 +127,7 @@ const StartupForm = () => {
         </div>
 
         <div>
-        <label htmlFor="title" className="startup-form_label!">
+        <label htmlFor="url" className="startup-form_label!">
             Image Url
         </label>
         <Input
