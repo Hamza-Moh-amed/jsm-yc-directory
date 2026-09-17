@@ -138,7 +138,7 @@
 }
 
 @utility heading {
-  @apply my-5 max-w-5xl bg-black px-6 py-3 text-center font-work-sans text-[26px] md:text[36px] leading-115 font-extrabold uppercase text-white;
+  @apply my-5 max-w-5xl bg-black px-6 py-3 text-center font-work-sans text-[36px] leading-115 font-extrabold uppercase text-white;
 
   @variant sm {
     font-size: 54px;
