@@ -12,9 +12,9 @@ const View = async ({id}: {id: string}) => {
 
 
     
-    after(async () => {
+    // after(async () => {
       await writeClient.patch(id).set({views: totalViews + 1}).commit()
-    })
+    // })
 
   return (
     <div className='view-container'>
