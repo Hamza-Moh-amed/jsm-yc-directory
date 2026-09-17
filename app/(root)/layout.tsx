@@ -4,8 +4,8 @@ import AuthProvider from "@/proviers/AuthProvider";
 import localFont from "next/font/local";
 import "easymde/dist/easymde.min.css"
 import { Toaster } from "@/components/ui/toast"
-import { SanityLive } from "@/sanity/lib/live";
 import Navbar from "@/components/Navbar";
+import { SanityLive } from "@/sanity/lib/live";
 
 const workSans = localFont({
   src: [
@@ -73,10 +73,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <AuthProvider>
         <Navbar />
         {children}
-        <SanityLive />
         <Toaster />
       </AuthProvider>
-        
+      <SanityLive />
         </body>
     </html>
   );

@@ -44,3 +44,26 @@ export const createPitch = async (state: any, form: FormData, pitch: string) => 
         return parseServerActionResponse({error: JSON.stringify(error), stats: "ERROR"})
     }
 }
+
+
+
+export async function incrementStartupViews(id: string) {
+  if (!id || typeof id !== "string") {
+    throw new Error("Invalid startup ID");
+  }
+
+  try {
+    const result = await writeClient
+      .patch(id)
+      .inc({ views: 1 })
+      .commit();
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error incrementing startup views:", error);
+
+    throw new Error("Failed to increment startup views");
+  }
+}
