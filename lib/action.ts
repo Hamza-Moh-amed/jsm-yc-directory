@@ -34,6 +34,7 @@ export const createPitch = async (state: any, form: FormData, pitch: string) => 
                 _ref: session?.id,
             },
             pitch,
+            views: 0
         }
 
         const result = await writeClient.create({_type: "startup", ...startup})
